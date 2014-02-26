@@ -14,6 +14,7 @@ Bundle 'scrooloose/syntastic'
 Bundle 'xolox/vim-notes'
 Bundle 'xolox/vim-misc'
 Bundle 'mileszs/ack.vim'
+Bundle 'Shougo/neocomplete.vim'
 Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 filetype plugin indent on     " required!
 
