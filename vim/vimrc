@@ -1,0 +1,76 @@
+filetype off                   " required!
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundlerequired! 
+Bundle 'gmarik/vundle'
+" My Bundles
+Bundle 'gregsexton/MatchTag'
+Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/syntastic'
+" Bundle 'Valloric/YouCompleteMe'
+" Bundle 'Blackrush/vim-gocode'
+Bundle 'xolox/vim-notes'
+Bundle 'xolox/vim-misc'
+Bundle 'mileszs/ack.vim'
+Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+filetype plugin indent on     " required!
+
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle command are not allowed..
+
+" Nerdtree options
+" auto open
+" autocmd vimenter * NERDTree 
+" map to ctrl+n to open close
+
+" FILETYPE OVERRIDES
+au BufNewFile,BufRead *.ctp set filetype=php
+
+" VIM-NOTES CONFIG
+:let g:notes_suffix = '.txt'
+:let g:notes_smart_quotes = 0
+
+
+" SET THEME
+try
+    color Tomorrow-Night-Eighties
+catch
+endtry
+
+
+" GENERAL SETUP
+set ic                                  " ignore case when searching
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set smarttab
+set expandtab
+set colorcolumn=80
+syntax on
+
+
+" REMAP
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+
+map <C-n> :NERDTreeToggle<CR>           " map nerdtree to ctrl+n 
+
+
+" PER HOST CONFIG
+if hostname() == "macbottle"
+    :so /Users/lincoln/Documents/development/config/vim/macbottle_vimrc
+endif
+
+if hostname() == "bottle"
+    :so /home/lincoln//Documents/development/config/vim/bottle_vimrc
+endif

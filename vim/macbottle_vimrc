@@ -1,0 +1,9 @@
+" MAC OSX
+
+" GENERAL
+set clipboard=unnamed                   " Use the clipboard
+
+
+" VIM-NOTES
+:let g:notes_directories = ['~/Documents/dius/documents']
+
