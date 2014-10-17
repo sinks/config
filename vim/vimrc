@@ -1,56 +1,116 @@
+set nocompatible              " be iMproved, required
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin() 
 
 " let Vundle manage Vundlerequired! 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 " My Bundles
-Bundle 'gregsexton/MatchTag'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
-Bundle 'mileszs/ack.vim'
-Bundle 'Shougo/neocomplete.vim'
-Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
-Bundle 'bling/vim-airline'
+Plugin 'Valloric/MatchTagAlways'
+Plugin 'scrooloose/nerdtree'
+Plugin 'mileszs/ack.vim' 
+Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'Shougo/neocomplete.vim'
+Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+Plugin 'bling/vim-airline'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'tpope/vim-fugitive'
+Plugin 'scrooloose/syntastic'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'guns/xterm-color-table.vim'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'othree/html5.vim'
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
 filetype plugin indent on     " required!
-
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle command are not allowed..
-
+" To ignore plugin indent changes, instead use:
+" "filetype plugin on
+" "
+" " Brief help
+" " :PluginList          - list configured plugins
+" " :PluginInstall(!)    - install (update) plugins
+" " :PluginSearch(!) foo - search (or refresh cache first) for foo
+" " :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
+" "
+" " see :h vundle for more details or wiki for FAQ
+" " Put your non-Plugin stuff after this line
 
 " FILETYPE OVERRIDES
 au BufNewFile,BufRead *.ctp set filetype=php
 
 
+" MATCH TAG ALWAYS
+let g:mta_filetypes = {
+      \ 'html' : 1,
+      \ 'xhtml' : 1,
+      \ 'xml' : 1,
+      \ 'jinja' : 1,
+      \ 'eruby' : 1,
+      \ 'php' : 1,
+      \ }
+
 " NEOCOMPLETE CONFIG
 let g:neocomplete#enable_at_startup = 1
 
+" INDENT COLOURS
+let g:indent_guides_enable_on_vim_startup = 0
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=236
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=235
 
 " AIRLINE CONFIG
 set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
+" UNITE
+if executable('ag')
+    let g:unite_source_grep_command='ag'
+    let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
+    let g:unite_source_grep_recursive_opt=''
+    let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
+elseif executable('ack')
+    let g:unite_source_grep_command='ack'
+    let g:unite_source_grep_default_opts='--no-heading --no-color -C4'
+    let g:unite_source_grep_recursive_opt=''
+endif
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank history/yank<cr>
+nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+nnoremap <leader>/ :<C-u>Unite -no-split -buffer-name=files   -start-insert grep:.<cr>
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Play nice with supertab
+  let b:SuperTabDisabled=1
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
+
+
+" ACK
+let g:ackprg = 'ag --nogroup --nocolor --column'
 
 " SET THEME
+set background=dark
 try
-    color Tomorrow-Night-Eighties
+  color Tomorrow-Night-Eighties
 catch
 endtry
 
 
 " GENERAL SETUP
 set ic                                  " ignore case when searching
-" set tabstop=4
-" set shiftwidth=4
-" set softtabstop=4
-set smarttab
-set expandtab
 set colorcolumn=80
 syntax on
 set showcmd
@@ -73,3 +133,21 @@ endif
 if hostname() == "bottle"
     :so /home/lincoln//Documents/development/config/vim/bottle_vimrc
 endif
+
+
+" INDENTING
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set smartindent
+set smarttab
+set expandtab
+set copyindent
+
+" RUBY
+autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
+" JS
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+" COFFEE
+autocmd FileType coffee setlocal shiftwidth=2 tabstop=2
+
