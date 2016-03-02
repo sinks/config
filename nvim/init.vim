@@ -1,24 +1,33 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
-Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/deoplete.nvim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'kien/ctrlp.vim'
 Plug 'mileszs/ack.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
+Plug 'flazz/vim-colorschemes'
+Plug 'benekastah/neomake'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'sheerun/vim-polyglot' " includes a lot of language plugins
+Plug 'fatih/vim-go'
 
 call plug#end()
 
-" NEOCOMPLETE CONFIG
-let g:neocomplete#enable_at_startup = 1
+" DEOPLETE CONFIG
+let g:deoplete#enable_at_startup = 1
 
 " CTRL+P
 if executable("ag")
   let g:ctrlp_user_command = 'ag %s -i -l --nocolor -g ""'
 end
+
+" NEOMAKE
+autocmd! BufWritePost * Neomake
+let g:neomake_javascript_enabled_makers = ['eslint']
 
 " IF GUI RUNNING
 if has("gui_running")
@@ -28,8 +37,11 @@ endif
 
 " SET THEME
 set background=dark
+set bg=dark
 try
-  color Tomorrow-Night-Eighties
+  "color Tomorrow-Night-Eighties
+  color Solarized
+  "color molokai
 catch
 endtry
 
@@ -56,10 +68,11 @@ nnoremap <left> <nop>
 nnoremap <right> <nop>
 map <leader>n :NERDTreeToggle<CR>           " map nerdtree to ctrl+n
 
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" CLIPBOARD
+set clipboard+=unnamedplus    " always use the clipboard
+
+" PYTHON3
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
