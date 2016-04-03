@@ -7,7 +7,7 @@ Plug 'mileszs/ack.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-sensible'
+" Plug 'tpope/vim-sensible'
 Plug 'flazz/vim-colorschemes'
 Plug 'benekastah/neomake'
 Plug 'vim-airline/vim-airline'
@@ -19,6 +19,9 @@ call plug#end()
 
 " DEOPLETE CONFIG
 let g:deoplete#enable_at_startup = 1
+
+" JSX/REACT
+let g:jsx_ext_required = 0
 
 " CTRL+P
 if executable("ag")
