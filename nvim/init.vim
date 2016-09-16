@@ -43,9 +43,11 @@ endif
 set termguicolors
 try
   "color Tomorrow-Night-Eighties
-  "color Solarized
+  "color Tomorrow-Night
+  color Solarized
   "color molokai
-  color wombat
+  "color wombat
+  "color gruvbox
 catch
 endtry
 
