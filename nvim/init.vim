@@ -1,19 +1,18 @@
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'kien/ctrlp.vim'
 Plug 'mileszs/ack.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
-" Plug 'tpope/vim-sensible'
 Plug 'flazz/vim-colorschemes'
 Plug 'benekastah/neomake'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'sheerun/vim-polyglot' " includes a lot of language plugins
-Plug 'fatih/vim-go'
+Plug 'jaawerth/nrun.vim'
 
 call plug#end()
 
@@ -31,6 +30,8 @@ end
 " NEOMAKE
 autocmd! BufWritePost * Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
+au BufEnter *.js let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
+au BufEnter *.jsx let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
 
 " IF GUI RUNNING
 if has("gui_running")
@@ -39,17 +40,18 @@ if has("gui_running")
 endif
 
 " SET THEME
-set background=dark
-set bg=dark
+set termguicolors
 try
   "color Tomorrow-Night-Eighties
-  color Solarized
+  "color Solarized
   "color molokai
+  color wombat
 catch
 endtry
 
+set background=dark
+
 " GENERAL {
-set colorcolumn=80
 set showcmd
 set ic
 " }
@@ -75,7 +77,7 @@ map <leader>n :NERDTreeToggle<CR>           " map nerdtree to ctrl+n
 set clipboard+=unnamedplus    " always use the clipboard
 
 " PYTHON3
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python3_host_prog = 'python3'
 
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
