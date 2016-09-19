@@ -19,6 +19,7 @@ call plug#end()
 
 " DEOPLETE CONFIG
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#file#enable_buffer_path = 1
 
 " JSX/REACT
 let g:jsx_ext_required = 0
@@ -74,11 +75,14 @@ set copyindent
 " }
 
 " REMAP
+let mapleader = "\<Space>"
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
 map <leader>n :NERDTreeToggle<CR>           " map nerdtree to ctrl+n
+map <leader>p :CtrlP<CR>
+map <leader>w :w<CR>
 
 " CLIPBOARD
 set clipboard+=unnamedplus    " always use the clipboard
