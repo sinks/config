@@ -54,6 +54,7 @@ try
   "color molokai
   "color wombat
   color gruvbox
+  "color badwolf
 catch
 endtry
 
@@ -89,12 +90,6 @@ set clipboard+=unnamedplus    " always use the clipboard
 
 " PYTHON3
 let g:python3_host_prog = 'python3'
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_ruby_checkers = ['rubocop']
 
 " RUBY
 autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
