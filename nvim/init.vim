@@ -30,9 +30,13 @@ end
 
 " NEOMAKE
 autocmd! BufWritePost * Neomake
-let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_javascript_enabled_makers = ['standard', 'eslint']
+let g:neomake_jsx_enabled_makers = ['standard', 'eslint']
+au BufEnter *.js let b:neomake_javascript_standard_exe = nrun#Which('standard')
+au BufEnter *.jsx let b:neomake_javascript_standard_exe = nrun#Which('standard')
 au BufEnter *.js let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
 au BufEnter *.jsx let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
+
 
 " IF GUI RUNNING
 if has("gui_running")
@@ -45,10 +49,10 @@ set termguicolors
 try
   "color Tomorrow-Night-Eighties
   "color Tomorrow-Night
-  color Solarized
+  "color Solarized
   "color molokai
   "color wombat
-  "color gruvbox
+  color gruvbox
 catch
 endtry
 
