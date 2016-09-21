@@ -2,7 +2,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'editorconfig/editorconfig-vim'
-Plug 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
 " Plug 'mileszs/ack.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'scrooloose/nerdcommenter'
@@ -14,6 +14,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'sheerun/vim-polyglot' " includes a lot of language plugins
 Plug 'jaawerth/nrun.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 call plug#end()
 
@@ -82,8 +84,13 @@ nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
 map <leader>n :NERDTreeToggle<CR>           " map nerdtree to ctrl+n
-map <leader>p :CtrlP<CR>
+" map <leader>p :CtrlP<CR>
+map <leader>f :Ag<CR>
 map <leader>w :w<CR>
+nnoremap <silent> <Leader>p :call fzf#run({
+      \   'source': "(git ls-files -oc --exclude-standard --full-name `git rev-parse --show-toplevel` \|\| ag -l -g '')",
+      \   'down': '40%',
+      \   'sink': 'botright split' })<CR>
 
 " CLIPBOARD
 set clipboard+=unnamedplus    " always use the clipboard
