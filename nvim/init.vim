@@ -19,6 +19,9 @@ Plug 'junegunn/fzf.vim'
 
 call plug#end()
 
+" BACKUP
+set backupcopy=yes " fixes npm noticing the build changes
+
 " DEOPLETE CONFIG
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
@@ -85,8 +88,8 @@ nnoremap <left> <nop>
 nnoremap <right> <nop>
 map <leader>n :NERDTreeToggle<CR>           " map nerdtree to ctrl+n
 " map <leader>p :CtrlP<CR>
-map <leader>f :Ag<CR>
 map <leader>w :w<CR>
+map <leader>f :Ag<CR>
 nnoremap <silent> <Leader>p :call fzf#run({
       \   'source': "(git ls-files -oc --exclude-standard --full-name `git rev-parse --show-toplevel` \|\| ag -l -g '')",
       \   'down': '40%',
