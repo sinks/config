@@ -92,8 +92,8 @@ map <leader>w :w<CR>
 map <leader>f :Ag<CR>
 nnoremap <silent> <Leader>p :call fzf#run({
       \   'source': "(git ls-files -oc --exclude-standard --full-name `git rev-parse --show-toplevel` \|\| ag -l -g '')",
-      \   'down': '40%',
-      \   'sink': 'botright split' })<CR>
+      \   'sink': 'e',
+      \   'down': '40%'})<CR>
 
 " CLIPBOARD
 set clipboard+=unnamedplus    " always use the clipboard
