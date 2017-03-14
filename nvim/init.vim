@@ -18,6 +18,8 @@ Plug 'sheerun/vim-polyglot' " includes a lot of language plugins
 Plug 'jaawerth/nrun.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'fatih/vim-go'
+Plug 'dart-lang/dart-vim-plugin'
 
 call plug#end()
 
@@ -141,12 +143,16 @@ endfunction
 
 " Strip whitespace {
 function! StripTrailingWhitespace()
-  call RunCmd('silent %s/\s\+$//e')
+  if &modifiable
+    call RunCmd('silent %s/\s\+$//e')
+  endif
 endfunction
 " }
 
 " Strip trailing newline {
 function! StripTrailingNewline()
-  call RunCmd('%s/\($\n\s*\)\+\%$//e')
+  if &modifiable
+    call RunCmd('%s/\($\n\s*\)\+\%$//e')
+  endif
 endfunction
 " }
