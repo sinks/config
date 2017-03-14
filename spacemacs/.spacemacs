@@ -29,6 +29,8 @@ values."
      git
      javascript
      react
+     elixir
+     ivy
      ;; markdown
      ;; org
      ;; (shell :variables
