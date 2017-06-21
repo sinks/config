@@ -4,8 +4,6 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'editorconfig/editorconfig-vim'
-" Plug 'kien/ctrlp.vim'
-" Plug 'mileszs/ack.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
@@ -20,6 +18,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'fatih/vim-go'
 Plug 'dart-lang/dart-vim-plugin'
+Plug 'elixir-lang/vim-elixir'
 
 call plug#end()
 
@@ -33,20 +32,22 @@ let g:deoplete#file#enable_buffer_path = 1
 " JSX/REACT
 let g:jsx_ext_required = 0
 
-" CTRL+P
-if executable("ag")
-  let g:ctrlp_user_command = 'ag %s -i -l --nocolor -g ""'
-end
-
 " NEOMAKE
 autocmd! BufWritePost * Neomake
-let g:neomake_javascript_enabled_makers = ['standard', 'eslint']
-let g:neomake_jsx_enabled_makers = ['standard', 'eslint']
-au BufEnter *.js let b:neomake_javascript_standard_exe = nrun#Which('standard')
-au BufEnter *.jsx let b:neomake_javascript_standard_exe = nrun#Which('standard')
-au BufEnter *.js let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
-au BufEnter *.jsx let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
+let enabled_js_linters = []
+if filereadable(nrun#Which('standard', 0))
+  call add(enabled_js_linters, 'standard')
+  au BufEnter *.js let b:neomake_javascript_standard_exe = nrun#Which('standard', 0)
+  au BufEnter *.jsx let b:neomake_javascript_standard_exe = nrun#Which('standard', 0)
+endif
 
+if filereadable(nrun#Which('eslint', 0))
+  call add(enabled_js_linters, 'eslint')
+  au BufEnter *.js let b:neomake_javascript_eslint_exe = nrun#Which('eslint', 0)
+  au BufEnter *.jsx let b:neomake_javascript_eslint_exe = nrun#Which('eslint', 0)
+endif
+
+let g:neomake_javascript_enabled_makers = enabled_js_linters
 
 " IF GUI RUNNING
 if has("gui_running")
