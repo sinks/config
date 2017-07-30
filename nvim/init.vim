@@ -47,6 +47,12 @@ if filereadable(nrun#Which('eslint', 0))
   au BufEnter *.jsx let b:neomake_javascript_eslint_exe = nrun#Which('eslint', 0)
 endif
 
+if filereadable(nrun#Which('flow', 0))
+  call add(enabled_js_linters, 'flow')
+  au BufEnter *.js let b:neomake_javascript_flow_exe = nrun#Which('flow', 0)
+  au BufEnter *.jsx let b:neomake_javascript_flow_exe = nrun#Which('flow', 0)
+endif
+
 let g:neomake_javascript_enabled_makers = enabled_js_linters
 
 " IF GUI RUNNING
