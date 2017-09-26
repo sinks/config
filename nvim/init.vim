@@ -19,6 +19,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'fatih/vim-go'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'elixir-lang/vim-elixir'
+Plug 'Shougo/denite.nvim'
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 
@@ -54,6 +56,14 @@ if filereadable(nrun#Which('flow', 0))
 endif
 
 let g:neomake_javascript_enabled_makers = enabled_js_linters
+
+let enabled_css_linters = []
+if filereadable(nrun#Which('stylelint', 0))
+  call add(enabled_css_linters, 'stylelint')
+  au BufEnter *.css let b:neomake_css_stylelint_exe = nrun#Which('stylelint', 0)
+endif
+
+let g:neomake_css_enabled_makers = enabled_css_linters
 
 " IF GUI RUNNING
 if has("gui_running")
@@ -109,12 +119,64 @@ nnoremap <silent> <Leader>p :call fzf#run({
 
 map <leader><Tab> :b!#<CR>
 map <leader>; <plug>NERDCommenterToggle<CR>
+map <leader>/ :DeniteProjectDir grep<CR>
+"map <leader>p :Denite menu -immediately-1 -mode=normal<CR>
+
+"nnoremap <silent> <Leader>p :call denite#start([{
+      "\   'name': 'menu/project', 'args': []
+      "\ }])<CR>
 
 " CLIPBOARD
 set clipboard+=unnamedplus    " always use the clipboard
 
 " PYTHON3
 let g:python3_host_prog = 'python3'
+
+" DENITE
+call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+call denite#custom#var('grep', 'command', ['ag'])
+call denite#custom#var('grep', 'default_opts',
+      \ ['-i', '--vimgrep'])
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', [])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
+
+let s:menus = {}
+"let s:menus.command_candidates = [
+      "\ ['p - project', 'Denite menu/project'],
+      "\ ]
+
+let s:menus.project = {'description': 'project'}
+let s:menus.project.command_candidates = [
+      \ ['f - find files in project', 'DeniteProjectDir file_rec'],
+      \ ['d - find dir in project', 'DeniteProjectDir directory_rec'],
+      \ ]
+call denite#custom#var('menu', 'menus', s:menus)
+
+let s:project_key_map = {
+      \ 'f': 0, 'd': 1
+      \ }
+
+
+call denite#custom#alias('source', 'menu/project', 'menu')
+call denite#custom#option('default', 'quick_move_table', s:project_key_map)
+call denite#custom#var('menu/project', 'menus', s:menus)
+
+" Commenter
+let g:NERDSpaceDelims = 1
+
+" LSP
+let serverCommands = {}
+if filereadable(nrun#Which('javascript-typescript-stdio'))
+  let serverCommands['javascript'] = [nrun#Which('javascript-typescript-stdio')]
+  let serverCommands['javascript.jsx'] = [nrun#Which('javascript-typescript-stdio')]
+endif
+
+let g:LanguageClient_serverCommands = serverCommands
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
 
 " RUBY
 autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
