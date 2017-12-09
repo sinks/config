@@ -1,32 +1,106 @@
-syntax on
-
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Tools
 Plug 'editorconfig/editorconfig-vim'
-Plug 'mhinz/vim-grepper'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
-Plug 'flazz/vim-colorschemes'
-Plug 'benekastah/neomake'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'sheerun/vim-polyglot' " includes a lot of language plugins
-Plug 'jaawerth/nrun.vim'
+
+" Code help
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'w0rp/ale'
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'neomake/neomake' " trying ale
+" Plug 'jaawerth/nrun.vim' " for neomake to use local npm
+
+" Searching/Navigation
+Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+" Plug 'mhinz/vim-grepper'
+
+" Testing
+Plug 'Shougo/denite.nvim'
+
+" Airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" Themes
+Plug 'morhetz/gruvbox'
+Plug 'sjl/badwolf'
+Plug 'icymind/NeoSolarized'
+Plug 'lifepillar/vim-solarized8'
+Plug 'crusoexia/vim-monokai'
+Plug 'nanotech/jellybeans.vim'
+Plug 'nightsense/vimspectr'
+" Plug 'flazz/vim-colorschemes' " use themes direct from git instead
+
+" Languages
 Plug 'fatih/vim-go'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'elixir-lang/vim-elixir'
-Plug 'Shougo/denite.nvim'
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'pangloss/vim-javascript'
+Plug 'vim-ruby/vim-ruby'
+Plug 'mxw/vim-jsx'
+" Plug 'sheerun/vim-polyglot' " includes a lot of language plugins
 
 call plug#end()
 
 " BACKUP
 set backupcopy=yes " fixes npm noticing the build changes
 
+" SET THEME
+set termguicolors
+set background=dark
+try
+  "color Tomorrow-Night-Eighties
+  "color Tomorrow-Night
+  "colorscheme NeoSolarized
+  "colorscheme solarized8
+  "colorscheme monokai
+  "colorscheme gruvbox
+  colorscheme badwolf
+catch
+endtry
+
+" GENERAL
+set ignorecase                  " ignore case
+set smartcase                   " ignorecase=false when includes an upper case char
+set inccommand=split            " live substitute preview
+
+" CLIPBOARD
+set clipboard+=unnamedplus    " always use the clipboard
+
+" INDENTING
+set expandtab                   " default to spaces
+set shiftwidth=2                " indent default of 2
+set softtabstop=-1              " -1 - use shiftwidth for tab
+set tabstop=2                   " make \t 2 spaces
+
+" REMAP
+let mapleader = "\<Space>"
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+map <leader>n :NERDTreeFind<CR>           " map nerdtree to ctrl+n
+map <leader>w :w<CR>
+map <leader>f :Ag<CR>
+nnoremap <silent> <Leader>p :call fzf#run({
+      \   'source': "(git ls-files -oc --exclude-standard --full-name `git rev-parse --show-toplevel` \|\| ag -l -g '')",
+      \   'sink': 'e',
+      \   'down': '40%'})<CR>
+
+map <leader><Tab> :b!#<CR>
+map <leader>; <plug>NERDCommenterToggle<CR>
+map <leader>/ :DeniteProjectDir grep<CR>
+"map <leader>p :Denite menu -immediately-1 -mode=normal<CR>
+
+"nnoremap <silent> <Leader>p :call denite#start([{
+      "\   'name': 'menu/project', 'args': []
+      "\ }])<CR>
+
+" PLUGINS
 " DEOPLETE CONFIG
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
@@ -71,63 +145,6 @@ if has("gui_running")
   set guifont=monaco:h13
 endif
 
-" SET THEME
-set termguicolors
-try
-  "color Tomorrow-Night-Eighties
-  "color Tomorrow-Night
-  "color Solarized
-  "color molokai
-  "color wombat
-  color gruvbox
-  "color badwolf
-catch
-endtry
-
-set background=dark
-
-" GENERAL {
-set showcmd
-set ic
-set inccommand=split " live substitute
-" }
-
-" INDENTING {
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set smartindent
-set smarttab
-set expandtab
-set copyindent
-" }
-
-" REMAP
-let mapleader = "\<Space>"
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-map <leader>n :NERDTreeFind<CR>           " map nerdtree to ctrl+n
-" map <leader>p :CtrlP<CR>
-map <leader>w :w<CR>
-map <leader>f :Ag<CR>
-nnoremap <silent> <Leader>p :call fzf#run({
-      \   'source': "(git ls-files -oc --exclude-standard --full-name `git rev-parse --show-toplevel` \|\| ag -l -g '')",
-      \   'sink': 'e',
-      \   'down': '40%'})<CR>
-
-map <leader><Tab> :b!#<CR>
-map <leader>; <plug>NERDCommenterToggle<CR>
-map <leader>/ :DeniteProjectDir grep<CR>
-"map <leader>p :Denite menu -immediately-1 -mode=normal<CR>
-
-"nnoremap <silent> <Leader>p :call denite#start([{
-      "\   'name': 'menu/project', 'args': []
-      "\ }])<CR>
-
-" CLIPBOARD
-set clipboard+=unnamedplus    " always use the clipboard
 
 " PYTHON3
 let g:python3_host_prog = 'python3'
@@ -158,7 +175,6 @@ let s:project_key_map = {
       \ 'f': 0, 'd': 1
       \ }
 
-
 call denite#custom#alias('source', 'menu/project', 'menu')
 call denite#custom#option('default', 'quick_move_table', s:project_key_map)
 call denite#custom#var('menu/project', 'menus', s:menus)
@@ -178,19 +194,28 @@ let g:LanguageClient_serverCommands = serverCommands
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 
-" RUBY
-autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
-" JS
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
-" COFFEE
-autocmd FileType coffee setlocal shiftwidth=2 tabstop=2
+
 " Strip trailing whitespace
-autocmd FileType * autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-" Strip trailing blank lines
-autocmd filetype c,cpp,java,go,php,javascript,perl,puppet,python,ruby,rust,twig,vim,xml,yml autocmd BufWritePre <buffer> call StripTrailingNewline()
+augroup AutoStripBlank
+  autocmd FileType * autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+  " Strip trailing blank lines
+  autocmd FileType c,cpp,java,go,php,javascript,perl,puppet,python,ruby,rust,twig,vim,xml,yml autocmd BufWritePre <buffer> call StripTrailingNewline()
+augroup END
+
+" pomodoro setup
+let g:PomodoroStart = ":vsplit term:////$GOPATH\/bin\/pomodoro 25 && notify-send 'take a break'"
+let g:PomodoroBreak = ":vsplit term:////$GOPATH\/bin\/pomodoro 5 && notify-send 'get back to work'"
+let g:PomodoroLBreak = ":vsplit term:////$GOPATH\/bin\/pomodoro 15 && notify-send 'get back to work'"
+function! StartPomodoro() abort
+  call RunCmd(g:PomodoroStart)
+endfunction
+
+command PomStart call RunCmd(g:PomodoroStart)
+command PomBreak call RunCmd(g:PomodoroBreak)
+command PomLBreak call RunCmd(g:PomodoroLBreak)
 
 " Save state and run cmd {
-function! RunCmd(cmd)
+function! RunCmd(cmd) abort
   " Save the last search
   let last_search=@/
   " Save the current cursor position
