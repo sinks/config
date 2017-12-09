@@ -9,8 +9,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'w0rp/ale'
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'neomake/neomake' " trying ale
-" Plug 'jaawerth/nrun.vim' " for neomake to use local npm
 
 " Searching/Navigation
 Plug 'scrooloose/nerdtree'
@@ -108,43 +106,11 @@ let g:deoplete#file#enable_buffer_path = 1
 " JSX/REACT
 let g:jsx_ext_required = 0
 
-" NEOMAKE
-autocmd! BufWritePost * Neomake
-let enabled_js_linters = []
-if filereadable(nrun#Which('standard', 0))
-  call add(enabled_js_linters, 'standard')
-  au BufEnter *.js let b:neomake_javascript_standard_exe = nrun#Which('standard', 0)
-  au BufEnter *.jsx let b:neomake_javascript_standard_exe = nrun#Which('standard', 0)
-endif
-
-if filereadable(nrun#Which('eslint', 0))
-  call add(enabled_js_linters, 'eslint')
-  au BufEnter *.js let b:neomake_javascript_eslint_exe = nrun#Which('eslint', 0)
-  au BufEnter *.jsx let b:neomake_javascript_eslint_exe = nrun#Which('eslint', 0)
-endif
-
-if filereadable(nrun#Which('flow', 0))
-  call add(enabled_js_linters, 'flow')
-  au BufEnter *.js let b:neomake_javascript_flow_exe = nrun#Which('flow', 0)
-  au BufEnter *.jsx let b:neomake_javascript_flow_exe = nrun#Which('flow', 0)
-endif
-
-let g:neomake_javascript_enabled_makers = enabled_js_linters
-
-let enabled_css_linters = []
-if filereadable(nrun#Which('stylelint', 0))
-  call add(enabled_css_linters, 'stylelint')
-  au BufEnter *.css let b:neomake_css_stylelint_exe = nrun#Which('stylelint', 0)
-endif
-
-let g:neomake_css_enabled_makers = enabled_css_linters
-
 " IF GUI RUNNING
 if has("gui_running")
   set noanti
   set guifont=monaco:h13
 endif
-
 
 " PYTHON3
 let g:python3_host_prog = 'python3'
@@ -182,18 +148,8 @@ call denite#custom#var('menu/project', 'menus', s:menus)
 " Commenter
 let g:NERDSpaceDelims = 1
 
-" LSP
-let serverCommands = {}
-if filereadable(nrun#Which('javascript-typescript-stdio'))
-  let serverCommands['javascript'] = [nrun#Which('javascript-typescript-stdio')]
-  let serverCommands['javascript.jsx'] = [nrun#Which('javascript-typescript-stdio')]
-endif
-
-let g:LanguageClient_serverCommands = serverCommands
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-
+" Language Client Server
+let g:LanguageClient_autoStart = 1 " Automatically start language servers.
 
 " Strip trailing whitespace
 augroup AutoStripBlank
