@@ -3,25 +3,64 @@ call plug#begin('~/.config/nvim/plugged')
 " Tools
 Plug 'editorconfig/editorconfig-vim'
 Plug 'scrooloose/nerdcommenter'
+Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
+" Plug 'junegunn/gv.vim'
+Plug 'jreybert/vimagit'
+Plug 'ervandew/supertab'
+Plug 'mboughaba/vim-lessmess'
 
 " Code help
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'w0rp/ale'
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" ncm2 completion
+" Plug 'ncm2/ncm2'
+" Plug 'roxma/nvim-yarp'
+" Plug 'ncm2/ncm2-path'
+" Plug 'ncm2/ncm2-bufword'
+"
+" Plug 'Shougo/neco-syntax'
+Plug 'w0rp/ale'   " ale keeps starting a dart_language_server as well as LanguageClient-neovim
+" Plug 'sbdchd/neoformat' " just want updates and be reminded about it
+" gives warnings about flow types
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
 
 " Searching/Navigation
 Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" Plug 'mhinz/vim-grepper'
+Plug 'dyng/ctrlsf.vim'                  " global search and replace coolness
+Plug 'stefandtw/quickfix-reflector.vim' " editing of quckfix lines
 
-" Testing
-Plug 'Shougo/denite.nvim'
+" Plug 'gabesoft/vim-ags' " ag specific with edit mode
+" Plug 'mhinz/vim-grepper' " live search by doing :Grepper<CR>:copen<CR>
+
+" Testing,
+" Plug 'Shougo/denite.nvim' " want to be alerted when updated
 
 " Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
+" Languages
+" Plug 'fatih/vim-go'
+" Plug 'dart-lang/dart-vim-plugin'
+" Plug 'elixir-lang/vim-elixir'
+" Plug 'pangloss/vim-javascript'
+" Plug 'vim-ruby/vim-ruby'
+" Plug 'mxw/vim-jsx'
+" Plug 'isobit/vim-caddyfile'
+" Plug 'ElmCast/elm-vim'
+" Plug 'HerringtonDarkholme/yats.vim'
+" Plug 'leafgarland/typescript-vim'
+" Plug 'peitalin/vim-jsx-typescript'
+Plug 'reasonml-editor/vim-reason-plus'
+" Plug 'aklt/plantuml-syntax'
+
+Plug 'sheerun/vim-polyglot' " includes a lot of language syntax
 
 " Themes
 Plug 'morhetz/gruvbox'
@@ -31,33 +70,40 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'crusoexia/vim-monokai'
 Plug 'nanotech/jellybeans.vim'
 Plug 'nightsense/vimspectr'
-" Plug 'flazz/vim-colorschemes' " use themes direct from git instead
+Plug 'joshdick/onedark.vim'
+Plug 'rakr/vim-one'
+Plug 'nightsense/shoji'
+Plug 'ayu-theme/ayu-vim'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'chrisduerr/vim-undead'
 
-" Languages
-Plug 'fatih/vim-go'
-Plug 'dart-lang/dart-vim-plugin'
-Plug 'elixir-lang/vim-elixir'
-Plug 'pangloss/vim-javascript'
-Plug 'vim-ruby/vim-ruby'
-Plug 'mxw/vim-jsx'
-" Plug 'sheerun/vim-polyglot' " includes a lot of language plugins
+" Plug 'ryanoasis/vim-devicons' " Slows down rendering Add icons need a nerd icon installed
+" Plug 'flazz/vim-colorschemes' " use themes direct from git instead
 
 call plug#end()
 
 " BACKUP
-set backupcopy=yes " fixes npm noticing the build changes
+" set backupcopy=yes " fixes npm noticing the build changes
 
 " SET THEME
 set termguicolors
 set background=dark
+let ayucolor="dark"
 try
-  "color Tomorrow-Night-Eighties
-  "color Tomorrow-Night
-  "colorscheme NeoSolarized
-  "colorscheme solarized8
-  "colorscheme monokai
-  "colorscheme gruvbox
-  colorscheme badwolf
+  " color Tomorrow-Night-Eighties
+  " color Tomorrow-Night
+  " colorscheme NeoSolarized
+  " colorscheme solarized8
+  " colorscheme solarized8_flat
+  " colorscheme monokai
+  " colorscheme gruvbox
+  colorscheme onedark
+  " colorscheme badwolf
+  " colorscheme jellybeans
+  " colorscheme onedark
+  " colorscheme shoji_niji
+  " colorscheme onehalflight
+  " colorscheme ayu
 catch
 endtry
 
@@ -81,131 +127,105 @@ nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
-map <leader>n :NERDTreeFind<CR>           " map nerdtree to ctrl+n
+map <leader>n :NERDTreeFind<CR>
 map <leader>w :w<CR>
 map <leader>f :Ag<CR>
+map <leader>b :Buffers<CR>
+map <leader>; <plug>NERDCommenterToggle<CR>
+map <leader>r <plug>CtrlSFPrompt
+
+" coc.vim
+nmap <leader>a  <Plug>(coc-codeaction)
+nmap <leader>gd  <Plug>(coc-definition)
+nmap <leader>gr  <Plug>(coc-refrences)
+nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>rn <Plug>(coc-rename)
+
+" languageClient_neovim
+" nnoremap <silent> <Leader>a :call LanguageClient#textDocument_codeAction()<CR>
+" nnoremap <silent> <Leader>gd :call LanguageClient#textDocument_definition()<CR>
+" nnoremap <silent> <Leader>gi :call LanguageClient#textDocument_implementation()<CR>
+" nnoremap <silent> <Leader>gr :call LanguageClient_textDocument_references()<CR>
+" nnoremap <silent> <Leader>h :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> <Leader>rn :call LanguageClient#textDocument_rename()<CR>
+
 nnoremap <silent> <Leader>p :call fzf#run({
-      \   'source': "(git ls-files -oc --exclude-standard --full-name `git rev-parse --show-toplevel` \|\| ag -l -g '')",
+      \   'source': "(ag -l -g '')",
       \   'sink': 'e',
       \   'down': '40%'})<CR>
 
-map <leader><Tab> :b!#<CR>
-map <leader>; <plug>NERDCommenterToggle<CR>
-map <leader>/ :DeniteProjectDir grep<CR>
-"map <leader>p :Denite menu -immediately-1 -mode=normal<CR>
-
-"nnoremap <silent> <Leader>p :call denite#start([{
-      "\   'name': 'menu/project', 'args': []
-      "\ }])<CR>
-
 " PLUGINS
+"
+" NCM2
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+" set completeopt=noinsert,menuone,noselect
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 " DEOPLETE CONFIG
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#file#enable_buffer_path = 1
+" let g:deoplete#enable_at_startup = 1
+" call deoplete#custom#option({
+"       \ 'max_list': 15,
+"       \ 'auto_complete_delay': 200,
+"       \ 'smart_case': v:true,
+"       \ 'ignore_case': v:true,
+"       \ })
+
+" SUPERTAB
+let g:SuperTabDefaultCompletionType = "<c-n>"
 
 " JSX/REACT
 let g:jsx_ext_required = 0
 
-" IF GUI RUNNING
-if has("gui_running")
-  set noanti
-  set guifont=monaco:h13
-endif
-
 " PYTHON3
-let g:python3_host_prog = 'python3'
+" let g:python3_host_prog = 'python3'
 
-" DENITE
-call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'default_opts',
-      \ ['-i', '--vimgrep'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
+" DART
+" let dart_format_on_save = 1
+" let dart_style_guide = 2
 
-let s:menus = {}
-"let s:menus.command_candidates = [
-      "\ ['p - project', 'Denite menu/project'],
-      "\ ]
-
-let s:menus.project = {'description': 'project'}
-let s:menus.project.command_candidates = [
-      \ ['f - find files in project', 'DeniteProjectDir file_rec'],
-      \ ['d - find dir in project', 'DeniteProjectDir directory_rec'],
-      \ ]
-call denite#custom#var('menu', 'menus', s:menus)
-
-let s:project_key_map = {
-      \ 'f': 0, 'd': 1
-      \ }
-
-call denite#custom#alias('source', 'menu/project', 'menu')
-call denite#custom#option('default', 'quick_move_table', s:project_key_map)
-call denite#custom#var('menu/project', 'menus', s:menus)
-
-" Commenter
+" NERD COMMENTER
 let g:NERDSpaceDelims = 1
+let g:NERDDefaultAlign = 'left'
 
-" Language Client Server
-let g:LanguageClient_autoStart = 1 " Automatically start language servers.
+" LANGUAGE CLIENT SERVER
+" let g:LanguageClient_autoStart = 1 " Automatically start language servers.
+" let g:LanguageClient_serverCommands = {
+"     \ 'reason': ['ocaml-language-server', '--stdio'],
+"     \ 'ocaml': ['ocaml-language-server', '--stdio'],
+"     \ 'javascript': ['javascript-typescript-stdio'],
+"     \ 'javascript.jsx': ['javascript-typescript-stdio'],
+"     \ 'ruby': ['solargraph', 'stdio'],
+"     \ 'dart': ['dart_language_server'],
+"     \ }
 
-" Strip trailing whitespace
-augroup AutoStripBlank
-  autocmd FileType * autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-  " Strip trailing blank lines
-  autocmd FileType c,cpp,java,go,php,javascript,perl,puppet,python,ruby,rust,twig,vim,xml,yml autocmd BufWritePre <buffer> call StripTrailingNewline()
-augroup END
+" let g:LanguageClient_useFloatingHover = 1
+" let g:LanguageClient_useVirtualText = 0
+" let g:LanguageClient_hoverPreview = "Auto"
+" let g:LanguageClient_completionPreferTextEdit = 1
 
-" pomodoro setup
-let g:PomodoroStart = ":vsplit term:////$GOPATH\/bin\/pomodoro 25 && notify-send 'take a break'"
-let g:PomodoroBreak = ":vsplit term:////$GOPATH\/bin\/pomodoro 5 && notify-send 'get back to work'"
-let g:PomodoroLBreak = ":vsplit term:////$GOPATH\/bin\/pomodoro 15 && notify-send 'get back to work'"
-function! StartPomodoro() abort
-  call RunCmd(g:PomodoroStart)
-endfunction
+" let g:neoformat_enabled_dart = ['dartfmt']
+" augroup fmt
+"   autocmd!
+"   autocmd BufWritePre * undojoin | Neoformat
+" augroup END
 
-command PomStart call RunCmd(g:PomodoroStart)
-command PomBreak call RunCmd(g:PomodoroBreak)
-command PomLBreak call RunCmd(g:PomodoroLBreak)
-
-" Save state and run cmd {
-function! RunCmd(cmd) abort
-  " Save the last search
-  let last_search=@/
-  " Save the current cursor position
-  let save_cursor = getpos(".")
-  " Save the window position
-  normal H
-  let save_window = getpos(".")
-  call setpos('.', save_cursor)
-
-  " Do the business:
-  execute a:cmd
-
-  " Restore the last_search
-  let @/=last_search
-  " Restore the window position
-  call setpos('.', save_window)
-  normal zt
-  " Restore the cursor position
-  call setpos('.', save_cursor)
-endfunction
-" }
-
-" Strip whitespace {
-function! StripTrailingWhitespace()
-  if &modifiable
-    call RunCmd('silent %s/\s\+$//e')
-  endif
-endfunction
-" }
-
-" Strip trailing newline {
-function! StripTrailingNewline()
-  if &modifiable
-    call RunCmd('%s/\($\n\s*\)\+\%$//e')
-  endif
-endfunction
-" }
+" ALE
+let g:ale_lint_on_save = 1 " is default just to make it explicit
+let g:ale_lint_on_text_changed = 'never' " seems slow editor down when typing
+let g:ale_ruby_rubocop_executable = 'bundle'
+let g:ale_cache_executable_check_failures = 0 " cache checks
+let g:ale_completion_enabled = 0
+let g:ale_linters = {
+    \ 'dart': ['dart_language_server'],
+    \ }
+let g:ale_dart_dartfmt_options = '-l 120'
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+    \ 'go': ['gofmt'],
+    \ 'reason': ['refmt'],
+    \ 'javascript': ['eslint', 'prettier'],
+    \ 'ruby': ['rubocop'],
+    \ 'css': ['prettier'],
+    \ 'dart': ['dartfmt'],
+    \ }
