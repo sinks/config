@@ -13,6 +13,7 @@ return require('packer').startup(function()
   -- lsp
   use 'neovim/nvim-lspconfig'
   use 'glepnir/lspsaga.nvim'
+  use 'alexaandru/nvim-lspupdate'
   use 'folke/lsp-colors.nvim'
   use {
     "folke/trouble.nvim",
@@ -31,7 +32,7 @@ return require('packer').startup(function()
 
   -- lint and fixing
   use 'w0rp/ale'
-  -- use 'jose-elias-alvarez/null-ls.nvim'
+  use 'jose-elias-alvarez/null-ls.nvim'
 
   -- navigation
   use 'preservim/nerdtree'
@@ -39,6 +40,7 @@ return require('packer').startup(function()
     'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
   }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
   -- status line
   use {
@@ -53,7 +55,6 @@ return require('packer').startup(function()
   -- Themes
   use {'dracula/vim', as = 'dracula'}
   use {'ishan9299/nvim-solarized-lua', as = 'solarized'}
-
   use "mcchrish/zenbones.nvim"
   use "rktjmp/lush.nvim"
 end)

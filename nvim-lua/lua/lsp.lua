@@ -1,4 +1,6 @@
 local nvim_lsp = require('lspconfig')
+local null_ls = require('lsp-null-ls')
+local exec = vim.api.nvim_exec
 
 require'lspsaga'.init_lsp_saga {
 }
@@ -35,22 +37,18 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts) ]]
 
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+  if client.resolved_capabilities.document_formatting then
+      exec('au BufWritePre * lua vim.lsp.buf.formatting_sync()', false)
+  end
 end
 
+local servers = { 'dartls', 'tsserver' }
+for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup({
+        on_attach = on_attach,
+    })
+end
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-require'lspconfig'.dartls.setup{
-  capabilities = capabilities,
-  on_attach = on_attach,
-  flags = {
-    debounce_text_changes = 150,
-  }
-}
-require'lspconfig'.tsserver.setup{
-  capabilities = capabilities,
-  on_attach = on_attach,
-  flags = {
-    debounce_text_changes = 150,
-  }
-}
+null_ls.setup(on_attach)
