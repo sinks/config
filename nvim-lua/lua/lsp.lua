@@ -1,6 +1,19 @@
 local nvim_lsp = require('lspconfig')
-local null_ls = require('lsp-null-ls')
+local null_ls = require('null-ls')
+
 local exec = vim.api.nvim_exec
+
+local b = null_ls.builtins
+
+local null_sources = {
+  b.code_actions.gitsigns,
+  -- b.formatting.dart_format
+}
+
+null_ls.config({
+  -- debug = true,
+  sources = null_sources,
+})
 
 require'lspsaga'.init_lsp_saga {
 }
@@ -44,11 +57,9 @@ local on_attach = function(client, bufnr)
   end
 end
 
-local servers = { 'dartls', 'tsserver' }
+local servers = { 'dartls', 'tsserver', 'null-ls' }
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup({
         on_attach = on_attach,
     })
 end
-
-null_ls.setup(on_attach)
