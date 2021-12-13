@@ -12,7 +12,6 @@ return require('packer').startup(function()
 
   -- lsp
   use 'neovim/nvim-lspconfig'
-  use 'glepnir/lspsaga.nvim'
   use 'alexaandru/nvim-lspupdate'
   use 'folke/lsp-colors.nvim'
   use {
@@ -21,17 +20,16 @@ return require('packer').startup(function()
   }
 
   -- completion
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/nvim-cmp'
-
-  -- use { 'ms-jpq/coq_nvim', branch = 'coq', run = ':COQdeps'} -- main one
-  -- use { 'ms-jpq/coq.artifacts', branch= 'artifacts'} -- 9000+ Snippets
+  -- use 'hrsh7th/cmp-nvim-lsp'
+  -- use 'hrsh7th/cmp-buffer'
+  -- use 'hrsh7th/cmp-path'
+  -- use 'hrsh7th/cmp-cmdline'
+  -- use 'hrsh7th/nvim-cmp'
+  use { 'ms-jpq/coq_nvim', branch = 'coq', run = ':COQdeps'} -- main one
+  use { 'ms-jpq/coq.artifacts', branch= 'artifacts'} -- 9000+ Snippets
 
   -- lint and fixing
-  use 'w0rp/ale'
+  -- use 'w0rp/ale'
   use 'jose-elias-alvarez/null-ls.nvim'
 
   -- navigation

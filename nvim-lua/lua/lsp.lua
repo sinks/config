@@ -5,21 +5,14 @@ local exec = vim.api.nvim_exec
 
 local b = null_ls.builtins
 
-local null_sources = {
-  b.code_actions.gitsigns,
-  -- b.formatting.dart_format
-}
-
-null_ls.config({
+null_ls.setup({
   -- debug = true,
-  sources = null_sources,
+  sources = {
+    b.code_actions.gitsigns,
+  }
 })
 
-require'lspsaga'.init_lsp_saga {
-}
-
-require("trouble").setup {
-}
+require("trouble").setup { }
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -34,7 +27,9 @@ local on_attach = function(client, bufnr)
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', '<Leader>gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', '<Leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', '<Leader>gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+
   --[[ buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
@@ -50,16 +45,22 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts) ]]
 
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  -- capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
   if client.resolved_capabilities.document_formatting then
-      exec('au BufWritePre * lua vim.lsp.buf.formatting_sync()', false)
+      vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
   end
 end
 
-local servers = { 'dartls', 'tsserver', 'null-ls' }
+local servers = { 'tsserver' }
+
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup({
         on_attach = on_attach,
     })
 end
+
+nvim_lsp.dartls.setup({
+  cmd = { "dart", "language-server" },
+  on_attach = on_attach,
+})
