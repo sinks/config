@@ -27,13 +27,14 @@ return require('packer').startup(function()
   }
 
   -- completion
-  -- use 'hrsh7th/cmp-nvim-lsp'
-  -- use 'hrsh7th/cmp-buffer'
-  -- use 'hrsh7th/cmp-path'
-  -- use 'hrsh7th/cmp-cmdline'
-  -- use 'hrsh7th/nvim-cmp'
-  use { 'ms-jpq/coq_nvim', branch = 'coq', run = ':COQdeps'} -- main one
-  use { 'ms-jpq/coq.artifacts', branch= 'artifacts'} -- 9000+ Snippets
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
+  use 'hrsh7th/nvim-cmp'
+  use "lukas-reineke/cmp-rg"
+  -- use { 'ms-jpq/coq_nvim', branch = 'coq', run = ':COQdeps'} -- main one
+  -- use { 'ms-jpq/coq.artifacts', branch= 'artifacts'} -- 9000+ Snippets
 
   -- lint and fixing
   -- use 'w0rp/ale'
